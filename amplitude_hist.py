@@ -9,10 +9,11 @@ import os
 import matplotlib.pyplot as plt
 
 # Function to process each CSV file
-def process_csv(df):
-    global all_amplitudes  # Reference to the global list to accumulate data
+def process_csv(csv_path):
+    global amplitudes  # Reference to the global list to accumulate data
+    df = pd.read_csv(csv_path, skiprows=(1,3))
     min_val = df["Channel D"].min()
-    all_amplitudes.append(min_val)
+    amplitudes.append(min_val)
 
 # Parse for --in_file 'directory'
 in_file = funcs.get_args()
@@ -24,13 +25,9 @@ hist_range = [-0.6, 0]  # Range of the Histogram [lower, upper]
 # ~~~ Edit these ~~~ #
 
 # This list will store all amplitudes from all subdirectories
-all_amplitudes = []
+amplitudes = []
 
 # Use funcs.loop_big to process each CSV file in each subdirectory
 funcs.loop_big(in_file, process_csv)
 
-hist_title = os.path.basename(os.path.normpath(in_file)) + " Histogram"
-funcs.plot_hist_1D(all_amplitudes, hist_title, "Amplitudes", hist_range)
-
-save_path = os.path.join(in_file, "amplitude_hist.png")
-plt.savefig(save_path)
+funcs.plot_hist_1D(amplitudes, in_file, "Amplitudes", hist_range)

@@ -29,8 +29,7 @@ def loop_big(dir_path, func):
             if not csv.lower().endswith('.csv'):
                 continue
             csv_path = os.path.join(subdir_path, csv)
-            df = pd.read_csv(csv_path, skiprows=(1,3))
-            func(df)
+            func(csv_path)
             print(f"\rProcessing: On Subdirectory {subdir_num}/{subdir_total}, File {csv_num}/{csv_total}    ", end="", flush=True)
 
 
@@ -46,8 +45,8 @@ def get_args():
     return in_file
 
 
-# Self Explanatory, plots histogram w/ error bars from a dataframe
-def plot_hist_1D(data, hist_title, x_axis_title, hist_range):
+# Self Explanatory, plots histogram w/ error bars from a dataframe, also saves the hist.png
+def plot_hist_1D(data, in_file, x_axis_title, hist_range):
     data = np.array(data, dtype=np.float64)
     counts, bin_edges = np.histogram(data, bins='auto', range=hist_range, density=True)
     bin_centers = 0.5 * (bin_edges[1:] + bin_edges[:-1])
@@ -56,12 +55,22 @@ def plot_hist_1D(data, hist_title, x_axis_title, hist_range):
     # Calculate errors for error bars
     counts_err = np.sqrt(counts / bin_width) / np.sqrt(len(data))  # Error for normalized histogram
 
-    plt.errorbar(bin_centers, counts, yerr=counts_err, fmt='o', ecolor='red', capsize=3, marker='.')
+    plt.errorbar(bin_centers, 
+                counts, 
+                yerr=counts_err,  
+                ecolor='black', 
+                capsize=3, 
+                marker='.',
+                color='black')
+    hist_title = os.path.basename(os.path.normpath(in_file)) + " Histogram"
     plt.title(hist_title)
     plt.xlabel(x_axis_title)
     plt.ylabel("Probability Density")
     plt.grid(True)
     plt.show()
+    save_path = os.path.join(in_file, "amplitude_hist.png")
+    plt.savefig(save_path)
+
 
 
 def placeholder(df):
