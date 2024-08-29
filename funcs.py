@@ -33,6 +33,7 @@ def loop_big(dir_path, func):
             func(df)
             print(f"\rProcessing: On Subdirectory {subdir_num}/{subdir_total}, File {csv_num}/{csv_total}    ", end="", flush=True)
 
+
 # Putting this here to standardize the command format
 # each bool is whether a specific script has that parameter
 # originally included output paths as well but I think it
@@ -44,6 +45,7 @@ def get_args():
     in_file = args.in_file
     return in_file
 
+
 # Self Explanatory, plots histogram w/ error bars from a dataframe
 def plot_hist_1D(data, hist_title, x_axis_title, hist_range):
     data = np.array(data, dtype=np.float64)
@@ -54,7 +56,7 @@ def plot_hist_1D(data, hist_title, x_axis_title, hist_range):
     # Calculate errors for error bars
     counts_err = np.sqrt(counts / bin_width) / np.sqrt(len(data))  # Error for normalized histogram
 
-    plt.errorbar(bin_centers, counts, yerr=counts_err, fmt='o', ecolor='red', capsize=3)
+    plt.errorbar(bin_centers, counts, yerr=counts_err, fmt='o', ecolor='red', capsize=3, marker='.')
     plt.title(hist_title)
     plt.xlabel(x_axis_title)
     plt.ylabel("Probability Density")
