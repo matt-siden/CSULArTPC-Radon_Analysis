@@ -45,7 +45,8 @@ def get_args():
     return in_file
 
 
-# Self Explanatory, plots histogram w/ error bars from a dataframe, also saves the hist.png
+# Self Explanatory, plots histogram w/ error bars from a python list (data), also saves the hist.png
+# to the input to the input directory.
 def plot_hist_1D(data, in_file, x_axis_title, hist_range):
     data = np.array(data, dtype=np.float64)
     counts, bin_edges = np.histogram(data, bins='auto', range=hist_range, density=True)
