@@ -11,7 +11,7 @@ import funcs
 # Appends these values to a 2D array [Times, Amps]
 def process_csv(csv_path):
     global data
-    timestamps.append(os.path.getctime(csv_path))
+    timestamps.append(os.path.getmtime(csv_path))
     df = pd.read_csv(csv_path, skiprows=(1,3))
     df['Channel D'] = pd.to_numeric(df['Channel D'], errors='coerce') # Convert String "NaN" to np.NaN
     amplitudes.append(df["Channel D"].min())
@@ -23,18 +23,24 @@ def process_csv(csv_path):
 def plot_2D_hists(x_list, y_list, in_file):
     fig, ax = plt.subplots(1,2, figsize=(16,8))
    
-    num_subdirs = len([x[0] for x in os.walk(in_file)])
-    print(num_subdirs)
+    #num_subdirs = len([x[0] for x in os.walk(in_file)])
+    #print(num_subdirs)
     log_hist_title = os.path.basename(os.path.normpath(in_file)) + " Histogram - Log Scale"
     reg_hist_title = os.path.basename(os.path.normpath(in_file)) + " Histogram"
 
-    ax[0].hist2d(x_list, y_list, bins=[num_subdirs, 100])
+    xmin = np.min(x_list)
+    xmax = np.max(x_list)
+
+    #2 minute bin Width I think
+    num_bins_x = int((xmax - xmin) / 2)
+
+    ax[0].hist2d(x_list, y_list, bins=[num_bins_x,500])
     ax[0].set_ylim([-1,0])
     ax[0].set_title(reg_hist_title, fontsize=20)
     ax[0].set_xlabel("Minutes Since Run Start", fontsize=16)
     ax[0].set_ylabel("Waveform Amplitude", fontsize=16)
 
-    ax[1].hist2d(x_list, y_list, bins=[num_subdirs, 100])
+    ax[1].hist2d(x_list, y_list, bins=[num_bins_x,100])
     ax[1].set_yscale('symlog')
     ax[1].set_title(log_hist_title, fontsize=20)
     ax[1].set_xlabel("Minutes Since Run Start", fontsize=16)
