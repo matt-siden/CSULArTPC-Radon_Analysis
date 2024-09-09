@@ -47,7 +47,8 @@ def get_args():
 
 # Self Explanatory, plots histogram w/ error bars from a python list (data), also saves the hist.png
 # to the input to the input directory.
-def plot_hist_1D(data, in_file, x_axis_title, hist_range):
+# save - boolean, if True saves next to the input file
+def plot_hist_1D(data, in_file, x_axis_title, hist_range, save):
     data = np.array(data, dtype=np.float64)
     counts, bin_edges = np.histogram(data, bins='auto', range=hist_range, density=True)
     bin_centers = 0.5 * (bin_edges[1:] + bin_edges[:-1])
@@ -68,11 +69,30 @@ def plot_hist_1D(data, in_file, x_axis_title, hist_range):
     plt.xlabel(x_axis_title)
     plt.ylabel("Probability Density")
     plt.grid(True)
+    if save:
+        save_path = os.path.join(in_file, "amplitude_hist.png")
+        plt.savefig(save_path)
     plt.show()
-    save_path = os.path.join(in_file, "amplitude_hist.png")
-    plt.savefig(save_path)
+    
+# Plot Waveform - Generally Plots a given column from a given df
+# df - input dataframe - probably already read from a csv
+# in_file - really only used for plot title
+# column - name of column to plot, 'Channel D' is usually the PMT Waveform. 
+# show - boolean shows plot if true
+def plot_waveform(df, in_file, column, show):
+    plt.figure(figsize=(10, 6))
+    plt.plot(df["Time"], df[column], marker='', linestyle='-', label=column)
 
+    ### Units may not be accurate based on how data is collected
+    plt.xlabel('Time [ns]')
+    plt.ylabel('Output Signal [V]')
 
+    plot_title = os.path.splitext(os.path.basename(in_file))[0] + " Waveform"
+    plt.title(plot_title)
+
+    plt.legend()
+    if show:
+        plt.show()
 
 def placeholder(df):
     pass
