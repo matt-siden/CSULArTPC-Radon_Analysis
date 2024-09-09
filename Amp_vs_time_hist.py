@@ -1,3 +1,8 @@
+# Skims a given run grabbing
+# 1) Amplitudes of each waveform
+# 2) File creation timestamps (Should be within minutes of event timing)
+# Generates a 2D histogram Amp vs Time vs count
+
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -19,7 +24,7 @@ def process_csv(csv_path):
 # a bit complex
 # x_list - list of x data
 # y_list - list of y data
-# in_file - pass filename - used to make title
+# in_file - pass filename - used to procedurally generate title
 def plot_2D_hists(x_list, y_list, in_file):
     fig, ax = plt.subplots(1, 2, figsize=(16, 8))
 

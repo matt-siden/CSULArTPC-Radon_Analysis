@@ -1,4 +1,4 @@
-# Histogram the amplitudes of a [triggered] dataset. 
+# Skims a given run and histograms the amplitudes of a dataset
 # Usage (Ubuntu): 'python3 path/to/amplitude_hists.py --in_file '/path/to/directory/''
 # Usage (Windows): 'python3 path\to\amplitude_hists.py --in_file \path\to\directory\'
 
@@ -17,7 +17,7 @@ def process_csv(csv_path):
 
 # Parse for --in_file 'directory'
 in_file = funcs.get_args()
-print(os.path.basename(os.path.normpath(in_file)))
+#print(os.path.basename(os.path.normpath(in_file)))
 # ~~~ Edit these ~~~ #
 #channel = 'Channel D'  # Channel to process (usually D in all recent runs)
 #bins = 100  # Histogram Bins

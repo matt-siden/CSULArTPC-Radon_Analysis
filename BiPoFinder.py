@@ -1,3 +1,8 @@
+# Skims a given run and creates two outputs
+# 1) A text file with each line the path of an csv file of a BiPo Candidate (two or more peaks)
+# 2) A directory with images of each BiPo Canditate
+# Both outputs are saved on the first level of the input directory. 
+
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -24,7 +29,7 @@ def process_csv(csv_path):
 in_file = funcs.get_args()
 
 # Declare output list of Waveforms with two peaks. 
-out_file_name = os.path.join(in_file,"BiPoCandidates.txt")
+out_file_name = os.path.join(in_file,"BiPoCandidates.csv")
 out_dir = os.path.join(in_file, "BiPoCandidates")
 
 # Create/Open output text file

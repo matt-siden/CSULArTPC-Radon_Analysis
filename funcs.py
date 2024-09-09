@@ -48,31 +48,40 @@ def get_args():
 # Self Explanatory, plots histogram w/ error bars from a python list (data), also saves the hist.png
 # to the input to the input directory.
 # save - boolean, if True saves next to the input file
-def plot_hist_1D(data, in_file, x_axis_title, hist_range, save):
+# norm - boolean, if True normalizes Hist
+def plot_hist_1D(data, in_file, x_axis_title, hist_range, norm, show, save):
     data = np.array(data, dtype=np.float64)
-    counts, bin_edges = np.histogram(data, bins='auto', range=hist_range, density=True)
+   
+    counts, bin_edges = np.histogram(data, bins=16, range=hist_range, density=norm)
     bin_centers = 0.5 * (bin_edges[1:] + bin_edges[:-1])
     bin_width = bin_edges[1] - bin_edges[0]
 
-    # Calculate errors for error bars
-    counts_err = np.sqrt(counts / bin_width) / np.sqrt(len(data))  # Error for normalized histogram
-
+    # Branching if normalization is desired
+    if norm:
+        counts_err = np.sqrt(counts / bin_width) / np.sqrt(len(data))
+        y_axis_title = "Probability Density"
+    else:
+        counts_err = np.sqrt(bin_width/counts)
+        y_axis_title = "Counts"
+    
     plt.errorbar(bin_centers, 
                 counts, 
                 yerr=counts_err,  
                 ecolor='black', 
                 capsize=3, 
-                marker='.',
+                fmt='.',
                 color='black')
     hist_title = os.path.basename(os.path.normpath(in_file)) + " Histogram"
     plt.title(hist_title)
     plt.xlabel(x_axis_title)
-    plt.ylabel("Probability Density")
+    plt.ylabel(y_axis_title)
     plt.grid(True)
+    if show:
+        plt.show()
     if save:
         save_path = os.path.join(in_file, "amplitude_hist.png")
         plt.savefig(save_path)
-    plt.show()
+    return counts, bin_centers
     
 # Plot Waveform - Generally Plots a given column from a given df
 # df - input dataframe - probably already read from a csv
